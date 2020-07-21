@@ -5,6 +5,8 @@
 #include <time.h>
 #include <ctype.h>
 #include <math.h>
+#include <libpmem.h>
+#include <libpmemobj.h>
 //#include "pflush.h"
 //#include ".../quartz/src/lib/pmalloc.h"   // path to pmalloc.h in Quartz
 

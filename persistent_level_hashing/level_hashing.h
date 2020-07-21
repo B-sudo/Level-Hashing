@@ -8,7 +8,8 @@
 #include <stdbool.h>
 #include "hash.h"
 #include "log.h"
-#include "libpmemobj.h"
+#include <libpmem.h>
+#include <libpmemobj.h>
 
 #define ASSOC_NUM 4                       // The number of slots in a bucket, should be smaller than 32
 
