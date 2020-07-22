@@ -1,10 +1,18 @@
 #include "level_hashing.h"
 
+#define LAYOUT_NAME levelhash
+#define PMEMOBJ_MIN_POOL 4096
 /*  Test:
     This is a simple test example to test the creation, insertion, search, deletion, update in Level hashing
 */
 int main(int argc, char* argv[])                        
 {
+    PMEMobjpool *pop = pmemobj_create(argv[1], LAYOUT_NAME, PMEMOBJ_MIN_POOL, 0666);
+	if (pop == NULL) {
+		perror("pmemobj_create");
+		return 1;
+	}
+
     int level_size = atoi(argv[1]);                     // INPUT: the number of addressable buckets is 2^level_size
     int insert_num = atoi(argv[2]);                     // INPUT: the number of items to be inserted
     int write_latency = atoi(argv[3]);                  // INPUT: the injected write latency
@@ -72,5 +80,6 @@ int main(int argc, char* argv[])
     printf("The number of items stored in the level hash table: %ld\n", level->level_item_num[0]+level->level_item_num[1]);    
     level_destroy(level);
 
+    pmemobj_close(pop);
     return 0;
 }
