@@ -47,8 +47,8 @@ typedef struct level_hash {               // A Level hash table
 } level_hash;
 
 struct root {
-    TOID (struct level_hash) level_hash_r;
-    TOID (struct level_log) level_log_r;
+    TOID (level_hash) level_hash_r;
+    TOID (level_log) level_log_r;
 };
 
 level_hash *level_init(uint64_t level_size);     
