@@ -1,5 +1,5 @@
 #include "log.h"
-
+#include "level_hashing.h"
 /*
 Function: log_create() 
         Create a log;
