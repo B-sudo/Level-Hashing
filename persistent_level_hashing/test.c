@@ -1,7 +1,6 @@
 #include "level_hashing.h"
 
 #define LAYOUT_NAME "levelhash"
-#define PMEMOBJ_MIN_POOL 4096
 /*  Test:
     This is a simple test example to test the creation, insertion, search, deletion, update in Level hashing
 */
