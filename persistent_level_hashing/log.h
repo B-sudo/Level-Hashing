@@ -37,10 +37,6 @@ typedef struct level_log
     uint64_t current_insert;
 }level_log;
 
-struct root {
-    TOID (struct level_hash) level_hash_r;
-    TOID (struct level_log) level_log_r;
-};
 
 level_log* log_create(uint64_t log_length);
 
