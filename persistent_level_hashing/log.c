@@ -10,8 +10,8 @@ log_create(uint64_t log_length, TOID(struct root) r)
     TOID(log_entry) entry;
     TOID(log_entry_insert) entry_insert;
 
-    r->level_log = TX_ZNEW(level_log);
-    level_log *log = D_RW(r->level_log);
+    r->level_log_r = TX_ZNEW(level_log);
+    level_log *log = D_RW(r->level_log_r);
     //level_log* log = pmalloc(sizeof(level_log));
     if (!log)
     {

@@ -38,8 +38,8 @@ typedef struct level_log
 }level_log;
 
 struct root {
-    TOID (level_hash) level_hash;
-    TOID (level_log) level_log;
+    TOID (level_hash) level_hash_r;
+    TOID (level_log) level_log_r;
 };
 
 level_log* log_create(uint64_t log_length);

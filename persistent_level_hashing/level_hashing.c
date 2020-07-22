@@ -97,8 +97,8 @@ level_init(uint64_t level_size, TOID(struct root) r)
 {
     TOID(level_bucket) bucket;
 
-    r->level_hash = TX_ZNEW(level_hash);
-    level_hash *level = D_RW(r->level_hash);
+    r->level_hash_r = TX_ZNEW(level_hash);
+    level_hash *level = D_RW(r->level_hash_r);
     //level_hash *level = pmalloc(sizeof(level_hash));
     if (!level)
     {
