@@ -51,7 +51,7 @@ struct root {
     TOID (level_log) level_log_r;
 };
 
-level_hash *level_init(uint64_t level_size);     
+level_hash *level_init(uint64_t level_size, TOID(struct root) r);     
 
 uint8_t level_insert(level_hash *level, uint8_t *key, uint8_t *value);          
 

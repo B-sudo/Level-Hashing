@@ -1,23 +1,27 @@
 #include "level_hashing.h"
 
-#define LAYOUT_NAME "levelhash"
+POBJ_LAYOUT_BEGIN(levelhash);
+POBJ_LAYOUT_ROOT(levelhash, struct my_root);
+POBJ_LAYOUT_END(levelhash);
 /*  Test:
     This is a simple test example to test the creation, insertion, search, deletion, update in Level hashing
 */
 int main(int argc, char* argv[])                        
 {
-    PMEMobjpool *pop = pmemobj_create(argv[1], LAYOUT_NAME, PMEMOBJ_MIN_POOL, 0666);
+    PMEMobjpool *pop = pmemobj_create(argv[1], POBJ_LAYOUT_NAME(levelhash), PMEMOBJ_MIN_POOL, 0666);
 	if (pop == NULL) {
 		perror("pmemobj_create");
 		return 1;
 	}
+    TOID(struct root) r = POBJ_ROOT(pop, struct root);
+
 
     int level_size = atoi(argv[1]);                     // INPUT: the number of addressable buckets is 2^level_size
     int insert_num = atoi(argv[2]);                     // INPUT: the number of items to be inserted
     int write_latency = atoi(argv[3]);                  // INPUT: the injected write latency
     
     init_pflush(2000, write_latency);
-    level_hash *level = level_init(level_size);
+    level_hash *level = level_init(level_size, r);
     uint64_t inserted = 0, i = 0;
     uint8_t key[KEY_LEN];
     uint8_t value[VALUE_LEN];
