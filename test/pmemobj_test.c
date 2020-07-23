@@ -74,23 +74,23 @@ static inline bool is_in_one_cache_line(void* x, void* y)
 Function: level_slot_flush
           write the j-th slot in the bucket
 */
-static inline void level_slot_flush(level_bucket* bucket, uint64_t j)
+static inline void level_slot_flush(PMEMobjpool *pop, level_bucket* bucket, uint64_t j)
 {
     // When the key-value item and token are in the same cache line, only one flush is acctually executed.
     if(is_in_one_cache_line(&bucket->slot[j], &bucket->token))
     {
         SET_BIT(bucket->token, j, 1);
-        pmemobj_persist((uint64_t *)&bucket->slot[j].key, 8);
-        pmemobj_persist((uint64_t *)&bucket->slot[j].value, 8);
+        pmemobj_persist(pop, (uint64_t *)&bucket->slot[j].key, 8);
+        pmemobj_persist(pop, (uint64_t *)&bucket->slot[j].value, 8);
     }
     else
     {
-        pmemobj_persist((uint64_t *)&bucket->slot[j].key, 8);
-        pmemobj_persist((uint64_t *)&bucket->slot[j].value, 8);
+        pmemobj_persist(pop, (uint64_t *)&bucket->slot[j].key, 8);
+        pmemobj_persist(pop, (uint64_t *)&bucket->slot[j].value, 8);
         asm_mfence();
         SET_BIT(bucket->token, j, 1);                   
     }
-    pmemobj_persist((uint64_t *)&bucket->token, 8);
+    pmemobj_persist(pop, (uint64_t *)&bucket->token, 8);
 }
 
 /*
@@ -98,7 +98,7 @@ Function: level_init()
         Initialize a level hash table
 */
 static TOID(level_hash)
-level_init(uint64_t level_size, TOID(struct root) r)
+level_init(PMEMobjpool *pop, uint64_t level_size, TOID(struct root) r)
 {
     TOID(level_bucket) bucket;
 
@@ -139,7 +139,7 @@ level_init(uint64_t level_size, TOID(struct root) r)
 
     uint64_t *ptr = (uint64_t *)&level;
     for(; ptr < (uint64_t *)&level + sizeof(level_hash); ptr += 8)
-        pmemobj_persist((uint64_t *)&ptr, 8);
+        pmemobj_persist(pop, (uint64_t *)&ptr, 8);
 
     printf("Level hashing: ASSOC_NUM %d, KEY_LEN %d, VALUE_LEN %d \n", ASSOC_NUM, KEY_LEN, VALUE_LEN);
     printf("The number of top-level buckets: %ld\n", level->addr_capacity);
@@ -163,7 +163,7 @@ int main(int argc, char* argv[])
     int insert_num = atoi(argv[2]);                     // INPUT: the number of items to be inserted
     int write_latency = atoi(argv[3]);                  // INPUT: the injected write latency
     
-    level_hash *level = level_init(level_size, r);
+    level_hash *level = level_init(pop, level_size, r);
 
     pmemobj_close(pop);
     return 0;

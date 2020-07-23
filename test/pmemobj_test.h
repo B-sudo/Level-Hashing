@@ -11,6 +11,8 @@
 #include <libpmemobj.h>
 
 #define ASSOC_NUM 4  
+#define KEY_LEN 16                        // The maximum length of a key
+#define VALUE_LEN 15                      // The maximum length of a value
 
 #define SET_BIT(token, n, bit) (bit ? (token|=(1<<n)) : (token&=~(1<<n)))
 
@@ -41,12 +43,13 @@ typedef struct level_hash {               // A Level hash table
     uint64_t f_seed;
     uint64_t s_seed;                      // Two randomized seeds for hash functions
 
-    level_log *log;                       // The log
+    //level_log *log;                       // The log
 } level_hash;
 
 struct root {
     TOID (level_hash) level_hash_r;
-    TOID (level_log) level_log_r;
+   //TOID (level_log) level_log_r;
 };
 
-level_hash *level_init(uint64_t level_size, TOID(struct root) r); 
+static inline void level_slot_flush(PMEMobjpool *pop, level_bucket* bucket, uint64_t j);
+static TOID(level_hash) level_init(uint64_t level_size, TOID(struct root) r); 
